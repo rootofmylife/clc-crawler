@@ -13,12 +13,13 @@ class VnthuquanSpider(scrapy.Spider):
         print("URL: " + response.url)
         print("+===========+")
 
+        # https://stackoverflow.com/questions/37577405/scrapy-crawling-not-working-on-aspx-website
         form_data = self.validate(response)
 
         post_urls = response.xpath('//li[@class="menutruyen"]//a/@href').extract()
         for url_item in post_urls:
             # js2xml allows us to parse the JS function and params, and so to grab the __EVENTTARGET
-            js_xml  = js2xml.parse(url_item)
+            js_xml  = js2xml.parse(response.urljoin(url_item))
             _id = js_xml.xpath("//identifier[@name='WebForm_PostBackOptions']/following-sibling::arguments/string[starts-with(.,'ctl')]")[0]
             form_data["__EVENTTARGET"] = _id.text
 
