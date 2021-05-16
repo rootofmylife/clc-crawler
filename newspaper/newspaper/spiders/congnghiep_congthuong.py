@@ -18,7 +18,6 @@ class CongnghiepCongthuongSpider(scrapy.Spider):
             yield scrapy.Request(url_item, callback=self.parse_post)
 
         next_page = response.xpath('//div[@class="grNextPage __MB_ARTICLE_PAGING lt"]//a[last()-1]/@href').extract_first()
-        print("yeah" + next_page)
         if next_page is not None:
             yield scrapy.Request(next_page, callback=self.parse)
 
